@@ -24,7 +24,7 @@ docker run -d \
   --name knit_db \
   -e MYSQL_ROOT_PASSWORD=password \
   -e MYSQL_DATABASE=knit_db \
-  -p 3306:3306 \
+  -p 3307:3306 \
   mysql:8.0
 
 # 상태 확인

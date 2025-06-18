@@ -1,4 +1,4 @@
 kakao:
-  client-id: 22998f90bb6eacb75990ef920f6b3a04
-  client-secret: 54XFhJwPlljHDyo91RXSDeJGwZN9CdND
   redirect-uri: http://localhost:8080/oauth2/callback/kakao
+  client-secret: 54XFhJwPlljHDyo91RXSDeJGwZN9CdND
+  client-id: 22998f90bb6eacb75990ef920f6b3a04
