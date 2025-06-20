@@ -1,5 +1,6 @@
 package com.knit.api.domain.post;
 
+import com.knit.api.domain.common.BaseEntity;
 import com.knit.api.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,7 +13,7 @@ import static lombok.AccessLevel.*;
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PRIVATE)
 @Builder
-public class Post {
+public class Post extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -25,14 +26,11 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User author;
 
-    private LocalDateTime createdAt;
-
     public static Post of(String title, String content, User author) {
         return Post.builder()
                 .title(title)
                 .content(content)
                 .author(author)
-                .createdAt(LocalDateTime.now())
                 .build();
     }
 }

@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: local
+    active: local,oauth
   application:
     name: knit-api
 

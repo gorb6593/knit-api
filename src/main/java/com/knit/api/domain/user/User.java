@@ -1,9 +1,11 @@
 package com.knit.api.domain.user;
 
+import com.knit.api.domain.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
+import static jakarta.persistence.EnumType.STRING;
 import static lombok.AccessLevel.*;
 
 @Entity
@@ -12,35 +14,34 @@ import static lombok.AccessLevel.*;
 @NoArgsConstructor(access = PROTECTED) // JPA/Hibernate 프록시 생성을 위한 기본생성자(외부 호출 X)
 @AllArgsConstructor(access = PRIVATE)  // 객체 생성은 빌더/팩토리 메소드로만 허용
 @Builder
-public class User {
+public class User extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 30)
-    private String nickname; // 사용자 표시명
+    @Column(length = 30)
+    private String nickname;
 
-    @Column(nullable = false, unique = true, length = 100)
+    @Column(length = 100)
     private String email;
 
     @Column(length = 200)
-    private String profileImage; // 프로필 이미지 URL
+    private String profileImage;
 
     @Column(length = 20)
-    @Enumerated(EnumType.STRING)
-    private AuthProvider provider; // GOOGLE, APPLE, KAKAO 등
+    @Enumerated(STRING)
+    private AuthProvider provider;
 
     @Column(length = 100, unique = true)
-    private String providerId; // 소셜 플랫폼의 유저 고유ID
+    private String providerId; // 소셜 플랫폼 유저 고유ID
 
     @Column(length = 200)
-    private String password; // email 회원가입 등(소셜 로그인은 null 가능)
+    private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Enumerated(STRING)
+    @Column
     private Role role;
 
-    private LocalDateTime createdAt;
 
     // == 정적 생성자 패턴 ==
     public static User social(String nickname, String email, String profileImage,
@@ -52,7 +53,6 @@ public class User {
                 .provider(provider)
                 .providerId(providerId)
                 .role(role)
-                .createdAt(LocalDateTime.now())
                 .build();
     }
 
@@ -63,7 +63,6 @@ public class User {
                 .password(password)
                 .provider(AuthProvider.LOCAL)
                 .role(role)
-                .createdAt(LocalDateTime.now())
                 .build();
     }
 

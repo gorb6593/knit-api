@@ -12,9 +12,6 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
-    /**
-     * 소셜 로그인 또는 이메일 가입 등 회원조회
-     */
     @Transactional(readOnly = true)
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
@@ -25,9 +22,6 @@ public class UserService {
         return userRepository.findByProviderAndProviderId(provider, providerId);
     }
 
-    /**
-     * 회원 저장(가입)
-     */
     @Transactional
     public User save(User user) {
         return userRepository.save(user);
@@ -37,4 +31,20 @@ public class UserService {
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
     }
+
+    public User saveOrLoginSocialUser(
+            String nickname, String email, String profileImage,
+            User.AuthProvider provider, String providerId, User.Role role
+    ) {
+        // 가입된 유저 찾기
+        Optional<User> optional = userRepository.findByProviderAndProviderId(provider, providerId);
+        if (optional.isPresent()) {
+            return optional.get();
+        }
+
+        // 신규 회원 가입
+        User user = User.social(nickname, email, profileImage, provider, providerId, role);
+        return userRepository.save(user);
+    }
+
 }
