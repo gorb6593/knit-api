@@ -3,6 +3,7 @@ package com.knit.api.controller.auth;
 import com.knit.api.domain.user.User;
 import com.knit.api.dto.auth.KakaoUserInfo;
 import com.knit.api.dto.auth.LoginResponse;
+import com.knit.api.dto.user.UserDto;
 import com.knit.api.service.auth.OAuth2Service;
 import com.knit.api.service.user.UserService;
 import com.knit.api.util.JwtProvider;
@@ -25,11 +26,11 @@ public class OAuth2CallbackController {
     public LoginResponse kakaoCallback(@RequestParam("code") String code) {
 
         // 카카오 유저 정보 조회
-        log.info("kakao code {}", code);
+        log.info("kakao code :: {}", code);
         KakaoUserInfo kakaoUser = oAuth2Service.handleKakaoLogin(code);
 
         // 회원가입 or 로그인 처리
-        log.info("kakao user {}", kakaoUser);
+        log.info("kakao user :: {}", kakaoUser);
         User user = userService.saveOrLoginSocialUser(
                 kakaoUser.nickname(),
                 kakaoUser.email(),
@@ -41,8 +42,12 @@ public class OAuth2CallbackController {
 
         // JWT Token 발급
         String token = jwtProvider.createToken(user);
-        log.info("kakao token {}", token);
+        log.info("kakao token :: {}", token);
 
-        return new LoginResponse(token);
+        // UserDto 변환
+        UserDto userDto = UserDto.from(user);
+        log.info("UserDto :: {}", userDto);
+
+        return new LoginResponse(token, userDto);
     }
 }

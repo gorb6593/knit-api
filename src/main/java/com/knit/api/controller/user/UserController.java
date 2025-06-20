@@ -5,6 +5,7 @@ import com.knit.api.dto.user.UserDto;
 import com.knit.api.dto.user.UserRegisterRequest;
 import com.knit.api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

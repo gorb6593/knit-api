@@ -1,8 +1,12 @@
 package com.knit.api.util;
 
 import com.knit.api.domain.user.User;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -38,5 +42,44 @@ public class JwtProvider {
                 .setExpiration(expiry)
                 .signWith(getSigningKey(), HS256)
                 .compact();
+    }
+
+    public String resolveToken(HttpServletRequest request) {
+        String bearer = request.getHeader("Authorization");
+        if (bearer != null && bearer.startsWith("Bearer ")) {
+            return bearer.substring(7);
+        }
+        return null;
+    }
+
+    // JWT 유효성 검증
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (ExpiredJwtException e) {
+            // 만료
+            return false;
+        } catch (JwtException | IllegalArgumentException e) {
+            // 변조/기타 오류
+            return false;
+        }
+    }
+
+    // Claims(유저정보, subject 등) 파싱
+    public Claims parseClaims(String token) {
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            // 만료 토큰도 claims는 꺼낼 수 있음
+            return e.getClaims();
+        }
     }
 }

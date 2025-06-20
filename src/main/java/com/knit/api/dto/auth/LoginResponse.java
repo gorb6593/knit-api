@@ -1,5 +1,8 @@
 package com.knit.api.dto.auth;
 
-public record LoginResponse (
-        String token
+import com.knit.api.dto.user.UserDto;
+
+public record LoginResponse(
+        String token,
+        UserDto user
 ) { }

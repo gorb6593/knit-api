@@ -44,14 +44,14 @@ dependencies {
     // Spring Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
-    // Lombok (코드 간결화)
+    // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    // Validation (유효성 검증)
+    // Validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    // Swagger/OpenAPI (API 명세 자동화)
+    // Swagger/OpenAPI
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 
     // Thymeleaf
