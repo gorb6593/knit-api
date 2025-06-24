@@ -16,12 +16,15 @@ jobs:
       - run: chmod +x ./gradlew
       - run: ./gradlew build -x test
 
-      # jar 파일만 EC2로 복사 (scp 직접 사용)
+      - name: Make SSH Key File
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > private_key
+          chmod 600 private_key
+
       - name: Copy JAR to EC2
         run: |
-          scp -i ${{ secrets.EC2_SSH_KEY }} -o StrictHostKeyChecking=no build/libs/knit-api-0.0.1-SNAPSHOT.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/knit-api/
+          scp -i private_key -o StrictHostKeyChecking=no build/libs/knit-api-0.0.1-SNAPSHOT.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/knit-api/
 
-      # EC2에서 실행
       - name: Run JAR on EC2
         uses: appleboy/ssh-action@master
         with:
@@ -30,4 +33,4 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             pkill -f 'java -jar' || true
-            nohup java -jar /home/ubuntu/knit-api/knit-api-0.0.1-SNAPSHOT.jar &
+            nohup java -jar /home/ubuntu/knit-api/knit-api-0.0.1-SNAPSHOT.jar > /home/ubuntu/knit-api/log.out 2>&1 &
