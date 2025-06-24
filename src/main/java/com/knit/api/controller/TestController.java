@@ -15,4 +15,9 @@ public class TestController {
     public String test2() {
         return "한글!!";
     }
+
+    @GetMapping("/test3")
+    public String test3() {
+        return "19208471298347128941278테스트";
+    }
 }
