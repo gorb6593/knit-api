@@ -5,7 +5,7 @@
 
 ## 기술 스택
 
-- 백엔드 : Java 24, Spring Boot 3.5.0, JPA, QueryDSL, Gradle, MySQL 8
+- 백엔드 : Java 21, Spring Boot 3.5.0, JPA, QueryDSL, Gradle, MySQL 8
 
 - 인프라: AWS EC2 (Ubuntu 22.04), AWS RDS(예정), S3 GitHub, Docker
 
