@@ -18,6 +18,6 @@ public class TestController {
 
     @GetMapping("/test3")
     public String test3() {
-        return "19208471298347128941278테스트";
+        return "1테스트";
     }
 }
