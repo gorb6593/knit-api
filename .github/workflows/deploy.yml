@@ -16,21 +16,31 @@ jobs:
       - run: chmod +x ./gradlew
       - run: ./gradlew build -x test
 
+      - name: Zip JAR file
+        run: zip -j build/libs/knit-api-0.0.1-SNAPSHOT.zip build/libs/knit-api-0.0.1-SNAPSHOT.jar
+
       - name: Make SSH Key File
         run: |
           echo "${{ secrets.EC2_SSH_KEY }}" > private_key
           chmod 600 private_key
 
-      - name: Copy JAR to EC2
+      - name: Copy ZIP to EC2
         run: |
-          scp -v -i private_key -o StrictHostKeyChecking=no build/libs/knit-api-0.0.1-SNAPSHOT.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/knit-api/
+          scp -C -v -i private_key -o StrictHostKeyChecking=no build/libs/knit-api-0.0.1-SNAPSHOT.zip ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/knit-api/
 
-      - name: Run JAR on EC2
+      - name: Unzip and Run JAR on EC2
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            cd /home/ubuntu/knit-api/
+            unzip -o knit-api-0.0.1-SNAPSHOT.zip
             pkill -f 'java -jar' || true
             nohup java -jar /home/ubuntu/knit-api/knit-api-0.0.1-SNAPSHOT.jar > /home/ubuntu/knit-api/log.out 2>&1 &
+            sleep 2
+            echo "[실행 후 자바 프로세스 확인]"
+            ps aux | grep java
+            echo "[log.out 마지막 20줄 출력]"
+            tail -20 /home/ubuntu/knit-api/log.out
