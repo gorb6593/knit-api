@@ -40,7 +40,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            set -e
+            set +e
             cd /home/ubuntu/knit-api/
 
             echo "[기존 프로세스 종료]"
