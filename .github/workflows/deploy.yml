@@ -69,3 +69,5 @@ jobs:
 
             echo "[log.out 마지막 20줄 출력]"
             tail -20 log.out
+            
+            exit 0
