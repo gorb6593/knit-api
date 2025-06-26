@@ -1,5 +1,7 @@
 ## TODO DB 생성 후 수정작업 해야함
 spring:
+#  profiles:
+#    active: prod
   datasource:
     url: jdbc:mysql://3.38.127.168:3307/knit_db?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
     username: root
