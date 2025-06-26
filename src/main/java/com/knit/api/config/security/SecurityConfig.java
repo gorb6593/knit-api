@@ -29,7 +29,8 @@ public class SecurityConfig {
                                 "/oauth2/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
-                                "/login"
+                                "/login",
+                                "/test/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 ).addFilterBefore(

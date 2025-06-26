@@ -16,31 +16,56 @@ jobs:
       - run: chmod +x ./gradlew
       - run: ./gradlew build -x test
 
-      - name: Zip JAR file
-        run: zip -j build/libs/knit-api-0.0.1-SNAPSHOT.zip build/libs/knit-api-0.0.1-SNAPSHOT.jar
-
       - name: Make SSH Key File
         run: |
           echo "${{ secrets.EC2_SSH_KEY }}" > private_key
           chmod 600 private_key
 
-      - name: Copy ZIP to EC2
+      - name: Copy JAR to EC2 (Verbose, 진단용)
         run: |
-          scp -C -v -i private_key -o StrictHostKeyChecking=no build/libs/knit-api-0.0.1-SNAPSHOT.zip ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/knit-api/
+          echo "=== 현재 작업 디렉토리 ==="
+          pwd
+          echo "=== 현재 파일 리스트 ==="
+          ls -al build/libs/
+          echo "=== private_key 파일 권한 ==="
+          ls -l private_key
+          echo "=== scp로 파일 전송 시작 ==="
+          scp -vvv -i private_key -o StrictHostKeyChecking=no build/libs/knit-api-0.0.1-SNAPSHOT.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/knit-api/
+          echo "=== scp 전송 결과 종료 ==="
 
-      - name: Unzip and Run JAR on EC2
+      - name: Run JAR on EC2
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            set -e
             cd /home/ubuntu/knit-api/
-            unzip -o knit-api-0.0.1-SNAPSHOT.zip
-            pkill -f 'java -jar' || true
-            nohup java -jar /home/ubuntu/knit-api/knit-api-0.0.1-SNAPSHOT.jar > /home/ubuntu/knit-api/log.out 2>&1 &
-            sleep 2
+
+            echo "[기존 프로세스 종료]"
+            pkill -f 'java -jar knit-api-0.0.1-SNAPSHOT.jar' || true
+
+            echo "[프로세스 종료 대기]"
+            sleep 5
+            if pgrep -f 'java -jar knit-api-0.0.1-SNAPSHOT.jar' > /dev/null; then
+              echo "아직 기존 jar 프로세스가 남아있음. 강제 종료 시도"
+              pkill -9 -f 'java -jar knit-api-0.0.1-SNAPSHOT.jar' || true
+              sleep 2
+            fi
+
+            echo "[기존 log 백업]"
+            if [ -f log.out ]; then
+              mv log.out log.out.$(date +%Y%m%d_%H%M%S)
+            fi
+
+            echo "[새 JAR 실행]"
+            nohup java -jar knit-api-0.0.1-SNAPSHOT.jar > log.out 2>&1 &
+
+            sleep 3
+
             echo "[실행 후 자바 프로세스 확인]"
-            ps aux | grep java
+            ps aux | grep 'java -jar knit-api-0.0.1-SNAPSHOT.jar' | grep -v grep
+
             echo "[log.out 마지막 20줄 출력]"
-            tail -20 /home/ubuntu/knit-api/log.out
+            tail -20 log.out
