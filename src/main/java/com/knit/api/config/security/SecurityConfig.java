@@ -30,7 +30,8 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/login",
-                                "/test/**"
+                                "/test/**",
+                                "/api/todos/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 ).addFilterBefore(
