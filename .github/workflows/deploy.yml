@@ -34,3 +34,31 @@ jobs:
           script: |
             pkill -f 'java -jar' || true
             nohup java -jar /home/ubuntu/knit-api/knit-api-0.0.1-SNAPSHOT.jar > /home/ubuntu/knit-api/log.out 2>&1 &
+
+      - name: Run JAR on EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "[실행 전 자바 프로세스 확인]"
+            ps aux | grep java
+
+            echo "[이전 자바 프로세스 종료]"
+            pkill -f 'java -jar' || true
+            sleep 2
+
+            echo "[디렉터리, JAR 파일 상태 확인]"
+            ls -al /home/ubuntu/knit-api/
+
+            echo "[새로 jar 실행]"
+            nohup java -jar /home/ubuntu/knit-api/knit-api-0.0.1-SNAPSHOT.jar > /home/ubuntu/knit-api/log.out 2>&1 &
+
+            sleep 2
+
+            echo "[실행 후 자바 프로세스 확인]"
+            ps aux | grep java
+
+            echo "[log.out 마지막 20줄 출력]"
+            tail -20 /home/ubuntu/knit-api/log.out
