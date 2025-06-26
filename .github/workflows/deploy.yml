@@ -30,8 +30,8 @@ jobs:
           echo "=== private_key 파일 권한 ==="
           ls -l private_key
           echo "=== scp로 파일 전송 시작 ==="
-          scp -vvv -i private_key -o StrictHostKeyChecking=no build/libs/knit-api-0.0.1-SNAPSHOT.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/knit-api/
-          echo "=== scp 전송 결과 종료 ==="
+          rsync -avzP -e "ssh -i private_key -o StrictHostKeyChecking=no" build/libs/knit-api-0.0.1-SNAPSHOT.jar ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/knit-api/
+          echo "=== rsync 전송 결과 종료 ==="
 
       - name: Run JAR on EC2
         uses: appleboy/ssh-action@master

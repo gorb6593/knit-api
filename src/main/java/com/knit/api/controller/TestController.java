@@ -8,18 +8,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test")
 public class TestController {
 
-    @GetMapping("/test1")
+    @GetMapping("/1")
     public String test() {
         return "test!!";
     }
 
-    @GetMapping("/test2")
+    @GetMapping("/2")
     public String test2() {
         return "한글!!";
     }
 
-    @GetMapping("/test3")
+    @GetMapping("/3")
     public String test3() {
-        return "1테스트";
+        return "테스트3";
     }
 }
