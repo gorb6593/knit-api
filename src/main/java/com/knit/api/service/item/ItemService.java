@@ -4,10 +4,13 @@ import com.knit.api.domain.item.*;
 import com.knit.api.domain.user.User;
 import com.knit.api.dto.item.*;
 import com.knit.api.repository.item.*;
+import com.knit.api.repository.item.ItemRepositoryCustom;
 import com.knit.api.repository.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +26,6 @@ import java.util.stream.IntStream;
 public class ItemService {
 
     private final ItemRepository itemRepository;
-    private final ItemImageRepository itemImageRepository;
     private final ItemLikeRepository itemLikeRepository;
     private final UserRepository userRepository;
 
@@ -60,26 +62,9 @@ public class ItemService {
         return toItemResponse(item);
     }
 
-    // 아이템 리스트 (간단 버전, 추후 페이징/검색 추가 가능)
     @Transactional(readOnly = true)
-    public List<ItemListResponse> getItemList() {
-        List<Item> items = itemRepository.findAll();
-
-        return items.stream()
-                .map(item -> new ItemListResponse(
-                        item.getId(),
-                        item.getTitle(),
-                        item.getPrice(),
-                        item.getRegion(),
-                        item.getStatus().name(),
-                        item.getImages().stream()
-                                .filter(ItemImage::isThumbnail)
-                                .findFirst()
-                                .map(ItemImage::getUrl)
-                                .orElse(null),
-                        item.getLikes().size()
-                ))
-                .collect(Collectors.toList());
+    public Page<ItemListResponse> getItemList(Pageable pageable) {
+        return itemRepository.findItemsWithThumbnailAndLikeCount(pageable);
     }
 
     // 아이템 수정 (본인만 가능)

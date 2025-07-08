@@ -5,8 +5,13 @@ import com.knit.api.domain.item.ItemStatus;
 import com.knit.api.service.item.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,17 +26,17 @@ public class ItemController {
 
     // 등록
     @PostMapping
-    public ResponseEntity<Long> createItem(Authentication authentication, @RequestBody ItemCreateRequest request) {
-
-        Long userId = Long.valueOf(authentication.getName());
-        Long itemId = itemService.createItem(userId, request);
-        return ResponseEntity.ok(itemId);
+    public void createItem(Authentication authentication, @RequestBody ItemCreateRequest request) {
+        itemService.createItem(Long.valueOf(authentication.getName()), request);
     }
 
     // 목록
     @GetMapping
-    public ResponseEntity<List<ItemListResponse>> getItems() {
-        return ResponseEntity.ok(itemService.getItemList());
+    public ResponseEntity<Page<ItemListResponse>> getItems(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+        return ResponseEntity.ok(itemService.getItemList(pageable));
     }
 
     // 상세

@@ -7,5 +7,5 @@ public record ItemListResponse(
         String region,
         String status,
         String thumbnailUrl,
-        int likeCount
+        Long likeCount
 ) {}
