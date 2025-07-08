@@ -30,7 +30,7 @@ public class ItemController {
         itemService.createItem(Long.valueOf(authentication.getName()), request);
     }
 
-    // 목록
+    // 목록(페이징)
     @GetMapping
     public ResponseEntity<Page<ItemListResponse>> getItems(
             @RequestParam(defaultValue = "0") int page,
@@ -48,10 +48,10 @@ public class ItemController {
     // 수정
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateItem(
-            @RequestHeader("X-USER-ID") Long userId,
+            Authentication authentication,
             @PathVariable Long id,
             @RequestBody ItemUpdateRequest request) {
-        itemService.updateItem(userId, id, request);
+        itemService.updateItem(Long.valueOf(authentication.getName()), id, request);
         return ResponseEntity.ok().build();
     }
 

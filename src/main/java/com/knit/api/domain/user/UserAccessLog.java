@@ -11,14 +11,11 @@ public class UserAccessLog extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
-    private Long userId;
+    private String userId;
     private String method;
     private String endpoint;
     @Column(length = 2000)
     private String queryParams;
-    @Column(length = 5000)
-    private String requestBody;
     private String ip;
     @Column(length = 1000)
     private String userAgent;
