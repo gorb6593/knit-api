@@ -6,6 +6,7 @@ import com.knit.api.service.item.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,9 +21,9 @@ public class ItemController {
 
     // 등록
     @PostMapping
-    public ResponseEntity<Long> createItem(
-            @RequestHeader("X-USER-ID") Long userId, // 인증 처리 예시
-            @RequestBody ItemCreateRequest request) {
+    public ResponseEntity<Long> createItem(Authentication authentication, @RequestBody ItemCreateRequest request) {
+
+        Long userId = Long.valueOf(authentication.getName());
         Long itemId = itemService.createItem(userId, request);
         return ResponseEntity.ok(itemId);
     }

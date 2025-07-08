@@ -45,11 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 if (user != null) {
 
-                    String username = user.getEmail();
-
-                    if (username == null || username.trim().isEmpty()) {
-                        username = user.getProvider().name().toLowerCase() + "_" + user.getProviderId();
-                    }
+                    String username = user.getId().toString();
 
                     String role = (user.getRole() != null && !user.getRole().name().trim().isEmpty())
                             ? user.getRole().name()

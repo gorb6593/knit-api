@@ -31,7 +31,8 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/login",
                                 "/test/**",
-                                "/api/todos/**"
+                                "/api/todos/**",
+                                "/login/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 ).addFilterBefore(
