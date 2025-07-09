@@ -66,7 +66,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
             log.warn("JWT 인증 실패: {}", e.getMessage());
-            response.setStatus(SC_UNAUTHORIZED);
+            SecurityContextHolder.clearContext();
         }
         filterChain.doFilter(request, response);
     }

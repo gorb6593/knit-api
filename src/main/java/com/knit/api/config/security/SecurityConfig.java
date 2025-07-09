@@ -3,6 +3,7 @@ package com.knit.api.config.security;
 import com.knit.api.repository.user.UserRepository;
 import com.knit.api.util.JwtProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -30,6 +32,7 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/login",
+                                "/kakao/login",
                                 "/test/**",
                                 "/api/todos/**",
                                 "/login/**"
@@ -40,11 +43,6 @@ public class SecurityConfig {
                         UsernamePasswordAuthenticationFilter.class
                 );
 
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/**").permitAll() // 모두 허용(로그인/회원가입)
-//                        //.requestMatchers("/api/posts/**").authenticated() // JWT 적용 시
-//                        .anyRequest().permitAll()
-//                );
         return http.build();
     }
 }
