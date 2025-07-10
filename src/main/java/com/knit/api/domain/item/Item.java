@@ -5,6 +5,7 @@ import com.knit.api.domain.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +26,10 @@ public class Item extends BaseEntity {
     private String region;
 
     @Column(precision = 10, scale = 8)
-    private Double latitude;
+    private BigDecimal latitude;
 
     @Column(precision = 11, scale = 8)
-    private Double longitude;
+    private BigDecimal longitude;
 
     @Enumerated(EnumType.STRING)
     private ItemStatus status;

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@Data
 public class TodoDto {
 
     // 생성 요청 DTO

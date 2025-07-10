@@ -28,7 +28,6 @@ public class TodoService {
         Todo todo = request.toEntity();
         Todo savedTodo = todoRepository.save(todo);
 
-        log.info("Todo created successfully with id: {}", savedTodo.getId());
         return TodoDto.Response.from(savedTodo);
     }
 
@@ -98,7 +97,6 @@ public class TodoService {
         }
 
         Todo updatedTodo = todoRepository.save(todo);
-        log.info("Todo updated successfully with id: {}", updatedTodo.getId());
 
         return TodoDto.Response.from(updatedTodo);
     }

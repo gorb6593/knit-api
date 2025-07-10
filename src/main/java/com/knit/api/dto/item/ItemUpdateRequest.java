@@ -1,5 +1,6 @@
 package com.knit.api.dto.item;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public record ItemUpdateRequest(
@@ -7,8 +8,8 @@ public record ItemUpdateRequest(
         String content,
         Long price,
         String region,
-        Double latitude,
-        Double longitude,
+        BigDecimal latitude,
+        BigDecimal longitude,
         List<String> imageUrls,
         int thumbnailIndex
 ) {}

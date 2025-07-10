@@ -1,5 +1,6 @@
 package com.knit.api.dto.item;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public record ItemResponse(
@@ -8,8 +9,8 @@ public record ItemResponse(
         String content,
         Long price,
         String region,
-        Double latitude,
-        Double longitude,
+        BigDecimal latitude,
+        BigDecimal longitude,
         String status,
         Long userId,
         String userNickname,

@@ -1,6 +1,7 @@
 kakao:
   #redirect-uri: http://localhost:8080/oauth2/callback/kakao
-  redirect-uri: http://localhost:8081/kakao/login
+  redirect-uri: http://localhost:8081/kakao-callback
+
   client-secret: 54XFhJwPlljHDyo91RXSDeJGwZN9CdND
   client-id: 22998f90bb6eacb75990ef920f6b3a04
   token-url: https://kauth.kakao.com/oauth/token
