@@ -8,6 +8,8 @@ public record ItemResponse(
         String content,
         Long price,
         String region,
+        Double latitude,
+        Double longitude,
         String status,
         Long userId,
         String userNickname,

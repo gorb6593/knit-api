@@ -39,6 +39,8 @@ public class ItemService {
         item.setContent(req.content());
         item.setPrice(req.price());
         item.setRegion(req.region());
+        item.setLatitude(req.latitude());
+        item.setLongitude(req.longitude());
         item.setStatus(ItemStatus.ON_SALE);
         List<ItemImage> images = makeImages(req.imageUrls(), req.thumbnailIndex());
         images.forEach(img -> {
@@ -70,6 +72,8 @@ public class ItemService {
         item.setContent(req.content());
         item.setPrice(req.price());
         item.setRegion(req.region());
+        item.setLatitude(req.latitude());
+        item.setLongitude(req.longitude());
 
         // 이미지 전체 갱신
         item.getImages().clear();
@@ -141,6 +145,8 @@ public class ItemService {
                 item.getContent(),
                 item.getPrice(),
                 item.getRegion(),
+                item.getLatitude(),
+                item.getLongitude(),
                 item.getStatus().name(),
                 item.getUser().getId(),
                 item.getUser().getNickname(),

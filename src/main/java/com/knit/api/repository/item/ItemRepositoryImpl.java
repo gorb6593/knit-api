@@ -33,6 +33,8 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                         item.title,
                         item.price,
                         item.region,
+                        item.latitude,
+                        item.longitude,
                         item.status.stringValue(),
                         image.url,
                         like.countDistinct()

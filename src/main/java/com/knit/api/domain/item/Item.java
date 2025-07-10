@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
-@NoArgsConstructor @AllArgsConstructor @Builder
+@NoArgsConstructor @AllArgsConstructor
 public class Item extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +24,14 @@ public class Item extends BaseEntity {
     private Long price;
     private String region;
 
+    @Column(precision = 10, scale = 8)
+    private Double latitude;
+
+    @Column(precision = 11, scale = 8)
+    private Double longitude;
+
     @Enumerated(EnumType.STRING)
-    private ItemStatus status; // 판매중, 예약중, 거래완료 등
+    private ItemStatus status;
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemImage> images = new ArrayList<>();

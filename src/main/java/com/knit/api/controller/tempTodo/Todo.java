@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "todos")
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

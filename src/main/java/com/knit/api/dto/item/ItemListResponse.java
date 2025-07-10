@@ -5,6 +5,8 @@ public record ItemListResponse(
         String title,
         Long price,
         String region,
+        Double latitude,
+        Double longitude,
         String status,
         String thumbnailUrl,
         Long likeCount

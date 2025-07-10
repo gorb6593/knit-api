@@ -7,6 +7,8 @@ public record ItemUpdateRequest(
         String content,
         Long price,
         String region,
-        List<String> imageUrls, // 전체 이미지 경로(수정 시 대체)
+        Double latitude,
+        Double longitude,
+        List<String> imageUrls,
         int thumbnailIndex
 ) {}

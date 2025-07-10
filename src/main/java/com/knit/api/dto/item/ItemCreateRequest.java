@@ -7,6 +7,8 @@ public record ItemCreateRequest(
         String content,
         Long price,
         String region,
+        Double latitude,
+        Double longitude,
         List<String> imageUrls,
         int thumbnailIndex
 ) {}
