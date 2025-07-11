@@ -12,12 +12,15 @@ import java.util.Optional;
 @Repository
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long>, ChatRoomRepositoryCustom {
 
-    @Query("SELECT cr FROM ChatRoom cr WHERE (cr.user1.id = :userId OR cr.user2.id = :userId) AND cr.isActive = true ORDER BY cr.updatedAt DESC")
+    @Query("SELECT cr FROM ChatRoom cr WHERE (cr.seller.id = :userId OR cr.buyer.id = :userId) AND cr.isActive = true ORDER BY cr.updatedAt DESC")
     List<ChatRoom> findActiveRoomsByUserId(@Param("userId") Long userId);
 
-    @Query("SELECT cr FROM ChatRoom cr WHERE ((cr.user1.id = :user1Id AND cr.user2.id = :user2Id) OR (cr.user1.id = :user2Id AND cr.user2.id = :user1Id)) AND cr.isActive = true")
-    Optional<ChatRoom> findActiveRoomByUsers(@Param("user1Id") Long user1Id, @Param("user2Id") Long user2Id);
+    @Query("SELECT cr FROM ChatRoom cr WHERE cr.item.id = :itemId AND cr.buyer.id = :buyerId AND cr.isActive = true")
+    Optional<ChatRoom> findActiveRoomByItemAndBuyer(@Param("itemId") Long itemId, @Param("buyerId") Long buyerId);
 
-    @Query("SELECT cr FROM ChatRoom cr WHERE cr.id = :roomId AND (cr.user1.id = :userId OR cr.user2.id = :userId) AND cr.isActive = true")
+    @Query("SELECT cr FROM ChatRoom cr WHERE cr.id = :roomId AND (cr.seller.id = :userId OR cr.buyer.id = :userId) AND cr.isActive = true")
     Optional<ChatRoom> findActiveRoomByIdAndUserId(@Param("roomId") Long roomId, @Param("userId") Long userId);
+
+    @Query("SELECT cr FROM ChatRoom cr WHERE cr.item.id = :itemId AND cr.isActive = true")
+    List<ChatRoom> findActiveRoomsByItemId(@Param("itemId") Long itemId);
 }

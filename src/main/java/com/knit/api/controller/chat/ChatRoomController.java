@@ -45,12 +45,24 @@ public class ChatRoomController {
     public ResponseEntity<ChatRoomDto> createChatRoom(
             @RequestBody ChatRoomDto.CreateRequest request,
             Authentication authentication) {
-        log.info("POST /api/chat/rooms - Creating chat room with user: {}", authentication.getName());
+        log.info("POST /api/chat/rooms - Creating chat room for item: {}", request.itemId());
         
-        Long userId = Long.parseLong(authentication.getName());
-        ChatRoom chatRoom = chatRoomService.createOrGetChatRoom(userId, request.targetUserId());
+        Long buyerId = Long.parseLong(authentication.getName());
+        ChatRoom chatRoom = chatRoomService.createOrGetChatRoom(request.itemId(), buyerId);
         
         return ResponseEntity.ok(ChatRoomDto.from(chatRoom));
+    }
+
+    @GetMapping("/item/{itemId}")
+    public ResponseEntity<List<ChatRoomDto>> getItemChatRooms(@PathVariable Long itemId) {
+        log.info("GET /api/chat/rooms/item/{} - Getting chat rooms for item", itemId);
+        
+        List<ChatRoom> chatRooms = chatRoomService.getItemChatRooms(itemId);
+        List<ChatRoomDto> responses = chatRooms.stream()
+                .map(ChatRoomDto::from)
+                .collect(Collectors.toList());
+        
+        return ResponseEntity.ok(responses);
     }
 
     @GetMapping("/{roomId}")
