@@ -28,8 +28,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 
         // 1. 쿼리 정의
         List<ItemListResponse> content = queryFactory
-                .select(Projections.constructor(ItemListResponse.class,
-                        item.id,
+                .select(item.id,
                         item.title,
                         item.price,
                         item.region,
@@ -37,15 +36,28 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                         item.longitude,
                         item.status.stringValue(),
                         image.url,
-                        like.countDistinct()
-                ))
+                        like.countDistinct())
                 .from(item)
                 .leftJoin(image).on(image.item.eq(item), image.isThumbnail.isTrue())
                 .leftJoin(like).on(like.item.eq(item))
+                .orderBy(item.id.desc())
                 .groupBy(item.id, image.url, item.title, item.price, item.region, item.status)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetch();
+                .fetch()
+                .stream()
+                .map(tuple -> new ItemListResponse(
+                        tuple.get(item.id),
+                        tuple.get(item.title),
+                        tuple.get(item.price),
+                        tuple.get(item.region),
+                        tuple.get(item.latitude),
+                        tuple.get(item.longitude),
+                        tuple.get(item.status.stringValue()),
+                        tuple.get(image.url),
+                        tuple.get(like.countDistinct())
+                ))
+                .toList();
 
         // 2. total count (group by면 countDistinct 필요)
         Long total = queryFactory

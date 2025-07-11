@@ -1,12 +1,14 @@
 package com.knit.api.dto.item;
 
+import java.math.BigDecimal;
+
 public record ItemListResponse(
         Long id,
         String title,
         Long price,
         String region,
-        Double latitude,
-        Double longitude,
+        BigDecimal latitude,
+        BigDecimal longitude,
         String status,
         String thumbnailUrl,
         Long likeCount

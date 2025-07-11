@@ -2,14 +2,17 @@ package com.knit.api.controller.tempTodo;
 
 import com.knit.api.domain.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "todos")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Setter @Getter
+@Data
 public class Todo extends BaseEntity {
 
     @Id

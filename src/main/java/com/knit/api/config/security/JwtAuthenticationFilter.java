@@ -53,7 +53,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     var principal = org.springframework.security.core.userdetails.User
                             .withUsername(username)
                             .password("NO_PASSWORD") //필수로 넣어야함
-                            .roles(user.getRole() != null ? user.getRole().name() : "USER")
                             .roles(role)
                             .build();
 

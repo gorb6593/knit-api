@@ -26,4 +26,18 @@ public record UserDto(
                 user.getCreatedAt()
         );
     }
+    
+    public record Summary(
+            Long id,
+            String nickname,
+            String profileImage
+    ) {
+        public static Summary from(User user) {
+            return new Summary(
+                    user.getId(),
+                    user.getNickname(),
+                    user.getProfileImage()
+            );
+        }
+    }
 }
