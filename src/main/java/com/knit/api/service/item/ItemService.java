@@ -121,14 +121,13 @@ public class ItemService {
         item.setStatus(status);
     }
 
-    // ===== 유틸 =====
     private List<ItemImage> makeImages(List<String> urls, int thumbnailIdx) {
         if (urls == null) return List.of();
         return IntStream.range(0, urls.size())
                 .mapToObj(i -> {
                     ItemImage img = new ItemImage();
                     img.setUrl(urls.get(i));
-                    img.setOriginalFileName(urls.get(i)); // 실제 구현시 변경
+                    img.setOriginalFileName(urls.get(i));
                     img.setThumbnail(i == thumbnailIdx);
                     return img;
                 })

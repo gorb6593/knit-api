@@ -26,8 +26,9 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepositoryCustom {
         
         return queryFactory
                 .selectFrom(chatRoom)
-                .leftJoin(chatRoom.user1).fetchJoin()
-                .leftJoin(chatRoom.user2).fetchJoin()
+                .leftJoin(chatRoom.item).fetchJoin()
+                .leftJoin(chatRoom.seller).fetchJoin()
+                .leftJoin(chatRoom.buyer).fetchJoin()
                 .where(
                         chatRoom.isActive.eq(true),
                         isUserParticipant(userId, chatRoom)
@@ -42,8 +43,9 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepositoryCustom {
         
         JPAQuery<ChatRoom> query = queryFactory
                 .selectFrom(chatRoom)
-                .leftJoin(chatRoom.user1).fetchJoin()
-                .leftJoin(chatRoom.user2).fetchJoin()
+                .leftJoin(chatRoom.item).fetchJoin()
+                .leftJoin(chatRoom.seller).fetchJoin()
+                .leftJoin(chatRoom.buyer).fetchJoin()
                 .where(
                         chatRoom.isActive.eq(true),
                         isUserParticipant(userId, chatRoom)
@@ -73,8 +75,9 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepositoryCustom {
         
         return queryFactory
                 .selectFrom(chatRoom)
-                .leftJoin(chatRoom.user1).fetchJoin()
-                .leftJoin(chatRoom.user2).fetchJoin()
+                .leftJoin(chatRoom.item).fetchJoin()
+                .leftJoin(chatRoom.seller).fetchJoin()
+                .leftJoin(chatRoom.buyer).fetchJoin()
                 .leftJoin(chatMessage).on(chatMessage.chatRoom.eq(chatRoom))
                 .where(
                         chatRoom.isActive.eq(true),
@@ -86,7 +89,7 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepositoryCustom {
     }
 
     private BooleanExpression isUserParticipant(Long userId, QChatRoom chatRoom) {
-        return chatRoom.user1.id.eq(userId)
-                .or(chatRoom.user2.id.eq(userId));
+        return chatRoom.seller.id.eq(userId)
+                .or(chatRoom.buyer.id.eq(userId));
     }
 }

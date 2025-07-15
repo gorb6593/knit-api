@@ -7,9 +7,10 @@ import java.time.LocalDateTime;
 
 public record ChatRoomDto(
         Long id,
-        String name,
-        UserDto.Summary user1,
-        UserDto.Summary user2,
+        Long itemId,
+        String itemTitle,
+        UserDto.Summary seller,
+        UserDto.Summary buyer,
         String lastMessage,
         Boolean isActive,
         LocalDateTime createdAt,
@@ -18,9 +19,10 @@ public record ChatRoomDto(
     public static ChatRoomDto from(ChatRoom chatRoom) {
         return new ChatRoomDto(
                 chatRoom.getId(),
-                chatRoom.getName(),
-                UserDto.Summary.from(chatRoom.getUser1()),
-                UserDto.Summary.from(chatRoom.getUser2()),
+                chatRoom.getItem().getId(),
+                chatRoom.getItem().getTitle(),
+                UserDto.Summary.from(chatRoom.getSeller()),
+                UserDto.Summary.from(chatRoom.getBuyer()),
                 chatRoom.getLastMessage(),
                 chatRoom.getIsActive(),
                 chatRoom.getCreatedAt(),
@@ -28,11 +30,12 @@ public record ChatRoomDto(
         );
     }
 
-    public record CreateRequest(Long targetUserId) {}
+    public record CreateRequest(Long itemId) {}
 
     public record Summary(
             Long id,
-            String name,
+            Long itemId,
+            String itemTitle,
             UserDto.Summary otherUser,
             String lastMessage,
             long unreadCount,
@@ -41,7 +44,8 @@ public record ChatRoomDto(
         public static Summary from(ChatRoom chatRoom, Long currentUserId, long unreadCount) {
             return new Summary(
                     chatRoom.getId(),
-                    chatRoom.getName(),
+                    chatRoom.getItem().getId(),
+                    chatRoom.getItem().getTitle(),
                     UserDto.Summary.from(chatRoom.getOtherUser(currentUserId)),
                     chatRoom.getLastMessage(),
                     unreadCount,

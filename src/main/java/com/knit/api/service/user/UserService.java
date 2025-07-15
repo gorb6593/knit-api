@@ -12,15 +12,6 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
-    @Transactional(readOnly = true)
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
-
-    @Transactional(readOnly = true)
-    public Optional<User> findByProviderAndProviderId(User.AuthProvider provider, String providerId) {
-        return userRepository.findByProviderAndProviderId(provider, providerId);
-    }
 
     @Transactional
     public User save(User user) {

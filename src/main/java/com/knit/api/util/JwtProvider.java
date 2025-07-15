@@ -44,6 +44,21 @@ public class JwtProvider {
                 .compact();
     }
 
+    public String createToken(Long userId) {
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + validityInMs);
+
+        return Jwts.builder()
+                .setSubject(userId.toString())
+                .claim("nickname", "test-user")
+                .claim("role", "USER")
+                .claim("provider", "TEST")
+                .setIssuedAt(now)
+                .setExpiration(expiry)
+                .signWith(getSigningKey(), HS256)
+                .compact();
+    }
+
     public String resolveToken(HttpServletRequest request) {
         String bearer = request.getHeader("Authorization");
         if (bearer != null && bearer.startsWith("Bearer ")) {
@@ -81,5 +96,10 @@ public class JwtProvider {
             // 만료 토큰도 claims는 꺼낼 수 있음
             return e.getClaims();
         }
+    }
+
+    // userId 추출
+    public String getUserId(String token) {
+        return parseClaims(token).getSubject();
     }
 }

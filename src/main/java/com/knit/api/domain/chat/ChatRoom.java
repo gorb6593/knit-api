@@ -1,6 +1,7 @@
 package com.knit.api.domain.chat;
 
 import com.knit.api.domain.common.BaseEntity;
+import com.knit.api.domain.item.Item;
 import com.knit.api.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,16 +21,17 @@ public class ChatRoom extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id", nullable = false)
+    private Item item;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user1_id", nullable = false)
-    private User user1;
+    @JoinColumn(name = "seller_id", nullable = false)
+    private User seller;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user2_id", nullable = false)
-    private User user2;
+    @JoinColumn(name = "buyer_id", nullable = false)
+    private User buyer;
 
     @Column(name = "last_message")
     private String lastMessage;
@@ -37,12 +39,11 @@ public class ChatRoom extends BaseEntity {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    public static ChatRoom createOneToOne(User user1, User user2) {
-        String roomName = user1.getNickname() + " & " + user2.getNickname();
+    public static ChatRoom createItemChat(Item item, User seller, User buyer) {
         return ChatRoom.builder()
-                .name(roomName)
-                .user1(user1)
-                .user2(user2)
+                .item(item)
+                .seller(seller)
+                .buyer(buyer)
                 .isActive(true)
                 .build();
     }
@@ -56,15 +57,19 @@ public class ChatRoom extends BaseEntity {
     }
 
     public boolean isParticipant(Long userId) {
-        return user1.getId().equals(userId) || user2.getId().equals(userId);
+        return seller.getId().equals(userId) || buyer.getId().equals(userId);
     }
 
     public User getOtherUser(Long userId) {
-        if (user1.getId().equals(userId)) {
-            return user2;
-        } else if (user2.getId().equals(userId)) {
-            return user1;
+        if (seller.getId().equals(userId)) {
+            return buyer;
+        } else if (buyer.getId().equals(userId)) {
+            return seller;
         }
         throw new IllegalArgumentException("User is not a participant of this chat room");
+    }
+
+    public String getRoomName() {
+        return item.getTitle() + " - " + seller.getNickname() + " & " + buyer.getNickname();
     }
 }

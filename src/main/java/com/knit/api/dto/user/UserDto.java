@@ -17,7 +17,7 @@ public record UserDto(
     public static UserDto from(User user) {
         return new UserDto(
                 user.getId(),
-                user.getNickname(),
+                user.getNickname() != null ? user.getNickname() : "익명",
                 user.getEmail(),
                 user.getProfileImage(),
                 user.getProvider().name(),
@@ -35,7 +35,7 @@ public record UserDto(
         public static Summary from(User user) {
             return new Summary(
                     user.getId(),
-                    user.getNickname(),
+                    user.getNickname() != null ? user.getNickname() : "익명",
                     user.getProfileImage()
             );
         }

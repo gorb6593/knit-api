@@ -22,6 +22,7 @@ MySQL 서버는 Docker를 통해 실행
 # MySQL 컨테이너 실행
 docker run -d \
   --name knit_db \
+  --restart unless-stopped \
   -e MYSQL_ROOT_PASSWORD=password \
   -e MYSQL_DATABASE=knit_db \
   -p 3307:3306 \
