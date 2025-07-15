@@ -1,11 +1,12 @@
-kakao:
-  #redirect-uri: http://localhost:8080/oauth2/callback/kakao
-  redirect-uri: http://localhost:8081/kakao-callback
-
-  client-secret: 54XFhJwPlljHDyo91RXSDeJGwZN9CdND
-  client-id: 22998f90bb6eacb75990ef920f6b3a04
-  token-url: https://kauth.kakao.com/oauth/token
-
-jwt:
-  secret: wYJkPpJ0T8ZqvIQAyPfsl9B86zTZ/nUV3Pmy2GfQQve6c7vTc6YyR+o77urN2Cw8aVd4aQ==
-  time: 2592000000 # (30일)
+#kakao:
+#  #redirect-uri: http://localhost:8080/oauth2/callback/kakao
+#  #redirect-uri: http://localhost:8081/kakao-callback
+#  #redirect-uri: http://192.167.0.152:8081/kakao-callback
+#
+#  #client-secret: 54XFhJwPlljHDyo91RXSDeJGwZN9CdND
+#  #client-id: 22998f90bb6eacb75990ef920f6b3a04
+#  #token-url: https://kauth.kakao.com/oauth/token
+#
+#jwt:
+#  secret: wYJkPpJ0T8ZqvIQAyPfsl9B86zTZ/nUV3Pmy2GfQQve6c7vTc6YyR+o77urN2Cw8aVd4aQ==
+#  time: 2592000000 # (30일)

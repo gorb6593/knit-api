@@ -1,6 +1,4 @@
 spring:
-#  profiles:
-#    active: local
   datasource:
     url: jdbc:mysql://localhost:3307/knit_db?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
     username: root
@@ -28,3 +26,13 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.type.descriptor.sql: trace
     org.hibernate.orm.jdbc.bind: trace
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY_ID:}
+      secret-key: ${AWS_SECRET_ACCESS_KEY:}
+    s3:
+      bucket: haekyuawsbucket
+    region:
+      static: ap-northeast-2
