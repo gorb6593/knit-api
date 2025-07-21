@@ -1,5 +1,6 @@
 package com.knit.api.dto.chat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.knit.api.domain.chat.ChatRoom;
 import com.knit.api.dto.user.UserDto;
 
@@ -13,7 +14,9 @@ public record ChatRoomDto(
         UserDto.Summary buyer,
         String lastMessage,
         Boolean isActive,
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime createdAt,
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime updatedAt
 ) {
     public static ChatRoomDto from(ChatRoom chatRoom) {
@@ -39,6 +42,7 @@ public record ChatRoomDto(
             UserDto.Summary otherUser,
             String lastMessage,
             long unreadCount,
+            @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
             LocalDateTime updatedAt
     ) {
         public static Summary from(ChatRoom chatRoom, Long currentUserId, long unreadCount) {

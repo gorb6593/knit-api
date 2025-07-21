@@ -45,6 +45,7 @@ public class SecurityConfig {
                                 "/login/**",
                                 "/ws/**",
                                 "/api/items/**",
+                                "/api/chat/**",
                                 "/api/todos/**"
                         ).permitAll()
                         .anyRequest().authenticated()
