@@ -7,6 +7,7 @@ public record ItemUpdateRequest(
         String title,
         String content,
         Long price,
+        String mode,
         String region,
         BigDecimal latitude,
         BigDecimal longitude,

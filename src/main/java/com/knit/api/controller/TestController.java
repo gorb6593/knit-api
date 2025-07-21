@@ -21,11 +21,6 @@ public class TestController {
         return "한글!!";
     }
 
-    @GetMapping("/3")
-    public String test3() {
-        return "테스트3";
-    }
-
     @GetMapping("/auth")
     public String testAuth(@AuthenticationPrincipal UserDetails userDetails) {
         return "인증된 사용자: " + userDetails.getUsername() + ", 권한: " + userDetails.getAuthorities();

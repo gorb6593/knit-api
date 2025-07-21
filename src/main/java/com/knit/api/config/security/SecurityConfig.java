@@ -42,12 +42,11 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/login",
                                 "/kakao/login",
-                                "/test/1",
-                                "/test/2", 
-                                "/test/3",
-                                "/api/todos/**",
                                 "/login/**",
-                                "/ws/**"
+                                "/ws/**",
+                                "/api/items/**",
+                                "/api/chat/**",
+                                "/api/todos/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 ).addFilterBefore(

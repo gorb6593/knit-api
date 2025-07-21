@@ -18,6 +18,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static java.time.LocalDateTime.now;
+
 @Slf4j
 @RequiredArgsConstructor
 @Transactional
@@ -41,7 +43,7 @@ public class ItemService {
         item.setRegion(req.region());
         item.setLatitude(req.latitude());
         item.setLongitude(req.longitude());
-        item.setStatus(ItemStatus.ON_SALE);
+        item.setStatus(req.mode());
         List<ItemImage> images = makeImages(req.imageUrls(), req.thumbnailIndex());
         images.forEach(img -> {
             img.setItem(item);
@@ -58,8 +60,8 @@ public class ItemService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ItemListResponse> getItemList(Pageable pageable) {
-        return itemRepository.findItemsWithThumbnailAndLikeCount(pageable);
+    public Page<ItemListResponse> getItemList(ItemSearchRequest searchRequest, Pageable pageable) {
+        return itemRepository.findItemsWithThumbnailAndLikeCount(searchRequest, pageable);
     }
 
     // 아이템 수정
@@ -74,6 +76,7 @@ public class ItemService {
         item.setRegion(req.region());
         item.setLatitude(req.latitude());
         item.setLongitude(req.longitude());
+        item.setStatus(ItemStatus.valueOf(req.mode()));
 
         // 이미지 전체 갱신
         item.getImages().clear();
@@ -84,14 +87,22 @@ public class ItemService {
         });
     }
 
-    // 아이템 삭제 (본인만 가능)
+    // 아이템 삭제
     public void deleteItem(Long userId, Long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new EntityNotFoundException("Item not found"));
-        if (!item.getUser().getId().equals(userId))
-            throw new IllegalStateException("No permission");
 
-        itemRepository.delete(item); // cascade로 이미지/좋아요 자동삭제
+        // 이미 삭제된 아이템인지 확인
+        if (item.getDeletedAt() != null) {
+            throw new IllegalStateException("Item already deleted");
+        }
+
+        if (!item.getUser().getId().equals(userId)) {
+            throw new IllegalStateException("No permission");
+        }
+
+        // 소프트 삭제 - deletedAt 설정
+        item.setDeletedAt(now());
     }
 
     // 좋아요 추가/취소

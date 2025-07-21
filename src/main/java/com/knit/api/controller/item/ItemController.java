@@ -68,6 +68,7 @@ public class ItemController {
             @RequestParam("title") String title,
             @RequestParam("content") String content,
             @RequestParam("price") Long price,
+            @RequestParam("mode") ItemStatus mode,
             @RequestParam("region") String region,
             @RequestParam(value = "latitude", required = false) BigDecimal latitude,
             @RequestParam(value = "longitude", required = false) BigDecimal longitude,
@@ -77,9 +78,7 @@ public class ItemController {
         try {
             List<String> imageUrls = files != null && !files.isEmpty() ? s3Service.uploadFiles(files) : List.of();
             
-            ItemCreateRequest request = new ItemCreateRequest(
-                    title, content, price, region, latitude, longitude, imageUrls, thumbnailIndex
-            );
+            ItemCreateRequest request = new ItemCreateRequest(title, content, price, mode, region, latitude, longitude, imageUrls, thumbnailIndex);
             
             itemService.createItem(Long.valueOf(authentication.getName()), request);
             return ResponseEntity.ok().build();
@@ -92,10 +91,11 @@ public class ItemController {
     // 목록(페이징)
     @GetMapping
     public ResponseEntity<Page<ItemListResponse>> getItems(
+            ItemSearchRequest searchRequest,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
-        return ResponseEntity.ok(itemService.getItemList(pageable));
+        return ResponseEntity.ok(itemService.getItemList(searchRequest, pageable));
     }
 
     // 상세
@@ -110,6 +110,7 @@ public class ItemController {
             Authentication authentication,
             @PathVariable Long id,
             @RequestBody ItemUpdateRequest request) {
+        log.info("request : {}", request);
         itemService.updateItem(Long.valueOf(authentication.getName()), id, request);
         return ResponseEntity.ok().build();
     }
@@ -117,9 +118,9 @@ public class ItemController {
     // 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteItem(
-            @RequestHeader("X-USER-ID") Long userId,
+            Authentication authentication,
             @PathVariable Long id) {
-        itemService.deleteItem(userId, id);
+        itemService.deleteItem(Long.valueOf(authentication.getName()), id);
         return ResponseEntity.ok().build();
     }
 
