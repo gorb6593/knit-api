@@ -1,5 +1,6 @@
 package com.knit.api.domain.item;
 
+import com.knit.api.domain.common.BaseEntity;
 import com.knit.api.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,7 +9,7 @@ import lombok.*;
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor @Builder
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "item_id"}))
-public class ItemLike {
+public class ItemLike extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

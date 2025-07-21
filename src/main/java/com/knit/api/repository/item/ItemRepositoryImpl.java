@@ -26,20 +26,25 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
         QItemImage image = QItemImage.itemImage;
         QItemLike like = QItemLike.itemLike;
 
-        // 1. 쿼리 정의
         List<ItemListResponse> content = queryFactory
                 .select(item.id,
                         item.title,
+                        item.content,
                         item.price,
                         item.region,
                         item.latitude,
                         item.longitude,
                         item.status.stringValue(),
+                        item.createdAt,
                         image.url,
                         like.countDistinct())
                 .from(item)
-                .leftJoin(image).on(image.item.eq(item), image.isThumbnail.isTrue())
-                .leftJoin(like).on(like.item.eq(item))
+                .leftJoin(image).on(image.item.eq(item),
+                        image.isThumbnail.isTrue(),
+                        image.deletedAt.isNull()) // 삭제되지 않은 이미지만
+                .leftJoin(like).on(like.item.eq(item),
+                        like.deletedAt.isNull()) // 삭제되지 않은 좋아요만
+                .where(item.deletedAt.isNull()) // 삭제되지 않은 아이템만
                 .orderBy(item.id.desc())
                 .groupBy(item.id, image.url, item.title, item.price, item.region, item.status)
                 .offset(pageable.getOffset())
@@ -49,20 +54,23 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                 .map(tuple -> new ItemListResponse(
                         tuple.get(item.id),
                         tuple.get(item.title),
+                        tuple.get(item.content),
                         tuple.get(item.price),
                         tuple.get(item.region),
                         tuple.get(item.latitude),
                         tuple.get(item.longitude),
                         tuple.get(item.status.stringValue()),
                         tuple.get(image.url),
+                        tuple.get(item.createdAt),
                         tuple.get(like.countDistinct())
                 ))
                 .toList();
 
-        // 2. total count (group by면 countDistinct 필요)
+        // total count
         Long total = queryFactory
                 .select(item.id.countDistinct())
                 .from(item)
+                .where(item.deletedAt.isNull()) // 삭제되지 않은 아이템만
                 .fetchOne();
 
         return new PageImpl<>(content, pageable, total == null ? 0 : total);
