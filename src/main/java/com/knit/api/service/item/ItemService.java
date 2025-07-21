@@ -60,8 +60,8 @@ public class ItemService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ItemListResponse> getItemList(Pageable pageable) {
-        return itemRepository.findItemsWithThumbnailAndLikeCount(pageable);
+    public Page<ItemListResponse> getItemList(ItemSearchRequest searchRequest, Pageable pageable) {
+        return itemRepository.findItemsWithThumbnailAndLikeCount(searchRequest, pageable);
     }
 
     // 아이템 수정

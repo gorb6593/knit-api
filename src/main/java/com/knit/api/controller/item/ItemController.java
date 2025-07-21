@@ -91,10 +91,11 @@ public class ItemController {
     // 목록(페이징)
     @GetMapping
     public ResponseEntity<Page<ItemListResponse>> getItems(
+            ItemSearchRequest searchRequest,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
-        return ResponseEntity.ok(itemService.getItemList(pageable));
+        return ResponseEntity.ok(itemService.getItemList(searchRequest, pageable));
     }
 
     // 상세
