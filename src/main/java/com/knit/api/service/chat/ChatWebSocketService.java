@@ -21,9 +21,10 @@ public class ChatWebSocketService {
             
             ChatMessageDto.WebSocketMessage wsMessage = ChatMessageDto.WebSocketMessage.from(message);
             
-            chatWebSocketHandler.sendMessageToUser(senderId, wsMessage);
+            // 채팅방의 모든 참여자에게 메시지 방송
+            chatWebSocketHandler.sendMessageToRoom(roomId, wsMessage);
             
-            log.info("Message sent via WebSocket to room: {}", roomId);
+            log.info("Message sent via WebSocket to room: {} from user: {}", roomId, senderId);
         } catch (Exception e) {
             log.error("Error sending message via WebSocket: {}", e.getMessage());
         }

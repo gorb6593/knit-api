@@ -1,7 +1,6 @@
 package com.knit.api.config;
 
 import com.knit.api.handler.ChatWebSocketHandler;
-import com.knit.api.util.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
@@ -13,11 +12,17 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketConfigurer {
 
-    private final JwtProvider jwtProvider;
+    private final ChatWebSocketHandler chatWebSocketHandler;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(new ChatWebSocketHandler(jwtProvider), "/ws/chat")
-                .setAllowedOrigins("*"); // 프로덕션에서는 특정 도메인으로 제한
+        // 네이티브 WebSocket (앱용)
+        registry.addHandler(chatWebSocketHandler, "/ws/chat")
+                .setAllowedOriginPatterns("*"); // 모든 도메인 허용 (개발용)
+        
+        // SockJS WebSocket (웹용)
+        registry.addHandler(chatWebSocketHandler, "/ws/chat-sockjs")
+                .setAllowedOriginPatterns("*")
+                .withSockJS(); // SockJS 지원 추가
     }
 }
