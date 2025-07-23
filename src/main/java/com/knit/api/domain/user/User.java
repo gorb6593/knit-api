@@ -73,4 +73,14 @@ public class User extends BaseEntity {
     public enum AuthProvider {
         LOCAL, GOOGLE, KAKAO, APPLE
     }
+
+    // == 비즈니스 로직 ==
+    public void updateProfile(String nickname, String profileImage) {
+        if (nickname != null && !nickname.trim().isEmpty()) {
+            this.nickname = nickname;
+        }
+        if (profileImage != null && !profileImage.trim().isEmpty()) {
+            this.profileImage = profileImage;
+        }
+    }
 }

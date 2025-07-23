@@ -53,6 +53,31 @@ public class S3Service {
         return fileUrl;
     }
 
+    public String uploadProfileImage(MultipartFile file) throws IOException {
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("File is empty");
+        }
+
+        String originalFilename = file.getOriginalFilename();
+        String extension = getFileExtension(originalFilename);
+        String key = generateProfileImageKey(extension);
+
+        log.info("Uploading profile image to S3: bucket={}, key={}, size={}", bucketName, key, file.getSize());
+
+        s3Client.putObject(
+                PutObjectRequest.builder()
+                        .bucket(bucketName)
+                        .key(key)
+                        .contentType(file.getContentType())
+                        .build(),
+                RequestBody.fromInputStream(file.getInputStream(), file.getSize())
+        );
+        
+        String fileUrl = getFileUrl(key);
+        log.info("Profile image uploaded successfully: {}", fileUrl);
+        return fileUrl;
+    }
+
     public List<String> uploadFiles(List<MultipartFile> files) throws IOException {
         return files.stream()
                 .map(file -> {
@@ -98,6 +123,16 @@ public class S3Service {
         String dateFolder = today.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 
         return String.format("items/%s/%s_%s.%s", dateFolder, timestamp, uuid, extension);
+    }
+
+    private String generateProfileImageKey(String extension) {
+        String uuid = UUID.randomUUID().toString();
+        String timestamp = String.valueOf(System.currentTimeMillis());
+
+        LocalDate today = LocalDate.now();
+        String dateFolder = today.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+
+        return String.format("profiles/%s/%s_%s.%s", dateFolder, timestamp, uuid, extension);
     }
 
     private String getFileExtension(String filename) {
