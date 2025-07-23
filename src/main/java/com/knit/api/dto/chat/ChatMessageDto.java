@@ -1,5 +1,6 @@
 package com.knit.api.dto.chat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.knit.api.domain.chat.ChatMessage;
 import com.knit.api.dto.user.UserDto;
 
@@ -12,6 +13,7 @@ public record ChatMessageDto(
         String content,
         String type,
         Boolean isRead,
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime createdAt
 ) {
     public static ChatMessageDto from(ChatMessage message) {
