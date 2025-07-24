@@ -46,7 +46,8 @@ public class SecurityConfig {
                                 "/ws/**",
                                 "/api/items/**",
                                 "/api/chat/**",
-                                "/api/todos/**"
+                                "/api/todos/**",
+                                "/kakao/mobile/callback"
                         ).permitAll()
                         .anyRequest().authenticated()
                 ).addFilterBefore(
