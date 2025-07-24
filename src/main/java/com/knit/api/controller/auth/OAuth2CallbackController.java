@@ -85,4 +85,70 @@ public class OAuth2CallbackController {
 
         return new LoginResponse(token, userDto);
     }
+
+    @GetMapping("/kakao/mobile/callback")
+    public String kakaoMobileCallback(@RequestParam String code) {
+        log.info("Kakao mobile callback received with code: {}", code);
+
+        return """
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <title>카카오 로그인 처리중</title>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        text-align: center;
+                        margin-top: 50px;
+                        background-color: #f8f9fa;
+                    }
+                    .container {
+                        max-width: 400px;
+                        margin: 0 auto;
+                        padding: 20px;
+                        background: white;
+                        border-radius: 8px;
+                        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                    }
+                    h2 {
+                        color: #333;
+                        margin-bottom: 10px;
+                    }
+                    p {
+                        color: #666;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h2>🔄 로그인 처리 중입니다...</h2>
+                    <p>잠시만 기다려주세요.</p>
+                </div>
+                <script>
+                    // React Native WebView로 인증 코드 전달
+                    if (window.ReactNativeWebView) {
+                        window.ReactNativeWebView.postMessage(JSON.stringify({
+                            type: 'KAKAO_AUTH_CODE',
+                            code: '%s'
+                        }));
+                    }
+
+                    // 웹에서도 동작하도록 fallback
+                    setTimeout(() => {
+                        try {
+                            window.close();
+                        } catch (e) {
+                            document.querySelector('.container').innerHTML = `
+                                <h2>✅ 인증이 완료되었습니다!</h2>
+                                <p>앱으로 돌아가세요.</p>
+                            `;
+                        }
+                    }, 1000);
+                </script>
+            </body>
+            </html>
+            """.formatted(code);
+    }
 }
