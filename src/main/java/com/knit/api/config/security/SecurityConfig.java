@@ -35,7 +35,6 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/auth/**",
                                 "/oauth2/**",
                                 "/oauth2/callback/**",
                                 "/swagger-ui/**",
@@ -47,7 +46,7 @@ public class SecurityConfig {
                                 "/api/items/**",
                                 "/api/chat/**",
                                 "/api/todos/**",
-                                "/kakao/mobile/callback"
+                                "/oauth2/callback/kakao/mobile/callback"
                         ).permitAll()
                         .anyRequest().authenticated()
                 ).addFilterBefore(
