@@ -26,11 +26,12 @@ public class SecurityConfig {
 
     private final JwtProvider jwtProvider;
     private final UserRepository userRepository;
+    private final RequestLoggingFilter requestLoggingFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-//                .addFilterBefore(new OriginLoggingSecurityFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(requestLoggingFilter, UsernamePasswordAuthenticationFilter.class)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth

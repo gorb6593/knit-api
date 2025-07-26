@@ -20,6 +20,14 @@ spring:
 server:
   port: 8080
 
+logging:
+  level:
+    com.knit.api: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %pid --- [%15.15t] %-40.40logger{39} : %m%n"
+
 cloud:
   aws:
     credentials:
