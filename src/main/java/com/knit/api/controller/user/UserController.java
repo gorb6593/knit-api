@@ -40,30 +40,11 @@ public class UserController {
         return ResponseEntity.ok(UserDto.from(user));
     }
 
-    // 프로필 수정 (닉네임만)
-    @PutMapping("/profile")
-    public ResponseEntity<UserDto> updateProfile(
-            Authentication authentication,
-            @RequestBody UserProfileUpdateRequest request
-    ) {
-        try {
-            if (authentication == null || authentication.getName() == null) {
-                return ResponseEntity.status(401).build();
-            }
-            
-            Long userId = Long.valueOf(authentication.getName());
-            User updatedUser = userService.updateProfile(userId, request, null);
-            return ResponseEntity.ok(UserDto.from(updatedUser));
-        } catch (IOException e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
-
     // 프로필 수정 (닉네임 + 프로필 이미지)
     @PostMapping("/profile/with-image")
     public ResponseEntity<UserDto> updateProfileWithImage(
             Authentication authentication,
-            @RequestPart(value = "data") String userData,
+            @RequestPart(value = "data", required = false) String userData,
             @RequestPart(value = "profileImage", required = false) MultipartFile profileImage
     ) {
         try {
