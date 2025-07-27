@@ -19,7 +19,6 @@ import static com.knit.api.domain.user.User.AuthProvider.KAKAO;
 @RestController
 @RequestMapping("/oauth2/callback")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*", allowedHeaders = "*", allowCredentials = "true")
 public class OAuth2CallbackController {
     private final OAuth2Service oAuth2Service;
     private final UserService userService;
