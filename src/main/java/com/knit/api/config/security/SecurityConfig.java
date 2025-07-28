@@ -49,7 +49,8 @@ public class SecurityConfig {
                                 "/api/todos/**",
                                 "/oauth2/callback/kakao/mobile/callback",
                                 "/favicon.ico",
-                                "/error"
+                                "/error",
+                                "/test/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 ).addFilterBefore(
